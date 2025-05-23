@@ -9,18 +9,3 @@ def init_db(app):
     db.init_app(app)
     ma.init_app(app)
     bcrypt.init_app(app)
-
-
-class User:
-    pass
-
-class IdempotencyKey:
-    pass
-class Interaction:
-    pass
-class Conversation:
-    pass
-
-
-class Transaction:
-    pass
