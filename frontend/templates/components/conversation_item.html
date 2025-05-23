@@ -1,0 +1,19 @@
+<div class="conversation-item p-3 hover:bg-gray-50 dark:hover:bg-slate-700 cursor-pointer border-l-4 border-transparent hover:border-gray-200 dark:hover:border-gray-600 transition-all duration-200 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+            <i class="fa fa-comments-o"></i>
+        </div>
+        <div class="flex-grow">
+            <h4 class="font-medium truncate">{{ conversation.title }}</h4>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                {{ conversation.updated_at.strftime('%Y-%m-%d %H:%M') if conversation.updated_at else '无更新' }}
+            </p>
+        </div>
+    </div>
+    <div class="flex items-center space-x-1">
+        <span class="text-xs text-gray-500 dark:text-gray-400">
+            {{ conversation.interactions_count or 0 }}
+        </span>
+        <i class="fa fa-chevron-right text-xs text-gray-400 dark:text-gray-500"></i>
+    </div>
+</div>

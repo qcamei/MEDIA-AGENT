@@ -1,0 +1,98 @@
+@layer utilities {
+    .content-auto {
+        content-visibility: auto;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #165DFF 0%, #3B82F6 100%);
+    }
+}
+
+/* 模态框动画 */
+.modal-appear {
+    animation: modalAppear 0.3s ease-out forwards;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 语音识别动画 */
+.voice-animation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+}
+
+.voice-animation span {
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    margin: 0 2px;
+    background-color: #165DFF;
+    border-radius: 4px;
+    animation: voiceBars 1s infinite ease-in-out;
+}
+
+.voice-animation span:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.voice-animation span:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.voice-animation span:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+.voice-animation span:nth-child(5) {
+    animation-delay: 0.4s;
+}
+
+@keyframes voiceBars {
+    0%, 100% {
+        transform: scaleY(0.3);
+    }
+    50% {
+        transform: scaleY(1);
+    }
+}
+
+/* 加载动画 */
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 2px solid #165DFF;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 手写板样式 */
+#handwriting-canvas {
+    touch-action: none;
+}

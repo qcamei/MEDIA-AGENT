@@ -1,0 +1,35 @@
+<div class="transaction-item p-3 border-b border-gray-100 dark:border-gray-700 last:border-0">
+    <div class="flex justify-between items-start">
+        <div class="flex items-center space-x-2">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center {% if transaction.status == 'pending' %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100{% elif transaction.status == 'confirmed' %}bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100{% else %}bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100{% endif %}">
+                {% if transaction.status == 'pending' %}
+                    <i class="fa fa-spinner fa-spin text-xs"></i>
+                {% elif transaction.status == 'confirmed' %}
+                    <i class="fa fa-check text-xs"></i>
+                {% else %}
+                    <i class="fa fa-times text-xs"></i>
+                {% endif %}
+            </div>
+            <h4 class="font-medium text-sm text-gray-800 dark:text-gray-200">
+                {% if transaction.type == 'generate' %}
+                    媒体生成
+                {% elif transaction.type == 'upload' %}
+                    GitHub 上传
+                {% else %}
+                    {{ transaction.type }}
+                {% endif %}
+            </h4>
+        </div>
+        <span class="text-xs text-gray-500 dark:text-gray-400">
+            {{ transaction.created_at.strftime('%H:%M:%S') if transaction.created_at else '未知时间' }}
+        </span>
+    </div>
+    <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 truncate max-w-[180px]">
+        {{ transaction.data.get('prompt', transaction.data.get('file_path', '未知操作')) }}
+    </p>
+    {% if transaction.status == 'pending' %}
+        <div class="mt-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+            <div class="bg-primary h-1.5 rounded-full" style="width: {{ transaction.data.get('progress', 30) }}%"></div>
+        </div>
+    {% endif %}
+</div>

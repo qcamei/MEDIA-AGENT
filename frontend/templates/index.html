@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+
+{% block title %}媒体生成助手{% endblock %}
+
+{% block header %}
+    <!-- 顶部导航栏 -->
+    <header class="bg-white dark:bg-slate-800 shadow-md sticky top-0 z-30 transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-paint-brush text-primary text-2xl"></i>
+                <h1 class="text-xl font-bold text-gray-800 dark:text-white">媒体生成助手</h1>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors" title="切换主题">
+                    <i class="fa fa-moon-o dark:hidden"></i>
+                    <i class="fa fa-sun-o hidden dark:inline"></i>
+                </button>
+                
+                <button id="language-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors" title="切换语言">
+                    <i class="fa fa-language"></i>
+                </button>
+                
+                <div id="user-menu" class="relative">
+                    <button id="user-btn" class="flex items-center space-x-2 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors">
+                        <div id="user-avatar" class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <span id="username-display" class="hidden md:inline text-sm font-medium text-gray-700 dark:text-gray-300">游客</span>
+                        <i class="fa fa-chevron-down text-xs text-gray-500 dark:text-gray-400"></i>
+                    </button>
+                    
+                    <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg py-2 hidden">
+                        <a href="#" id="login-link" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700">
+                            <i class="fa fa-sign-in mr-2"></i>登录
+                        </a>
+                        <a href="#" id="register-link" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700">
+                            <i class="fa fa-user-plus mr-2"></i>注册
+                        </a>
+                        <a href="#" id="logout-link" class="block px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 hidden">
+                            <i class="fa fa-sign-out mr-2"></i>登出
+                        </a>
+                    </div>
+                </div>
+                
+                <button id="download-btn" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg shadow transition-all duration-300 flex items-center">
+                    <i class="fa fa-download mr-2"></i>
+                    <span>下载</span>
+                </button>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block content %}
+    <!-- 主要内容 -->
+    <main class="flex-grow container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6">
+        <!-- 对话列表侧边栏 -->
+        <div class="lg:w-1/4">
+            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg h-full flex flex-col">
+                <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                    <h3 class="font-bold">对话列表</h3>
+                    <div class="flex space-x-2">
+                        <button id="new-conversation-btn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors" title="新建对话">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <button id="delete-selected-btn" class="p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900 transition-colors text-red-500 dark:text-red-400 hidden" title="删除选中">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="conversation-list" class="overflow-y-auto scrollbar-hide flex-grow">
+                    <!-- 对话列表将通过 JavaScript 动态加载 -->
+                    <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+                        <i class="fa fa-comments-o text-4xl mb-2"></i>
+                        <p>暂无对话</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 对话内容区域 -->
+        <div class="lg:w-3/4">
+            <div id="no-conversation-selected" class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-12 text-center">
+                <i class="fa fa-comments text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                <h3 class="text-xl font-bold mb-2">选择或创建一个对话</h3>
+                <p class="text-gray-500 dark:text-gray-400 mb-6">开始生成媒体内容</p>
+                <button id="create-first-conversation" class="px-6 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg shadow transition-all duration-300">
+                    <i class="fa fa-plus-circle mr-2"></i>
+                    <span>创建第一个对话</span>
+                </button>
+            </div>
+
+            <div id="conversation-container" class="hidden bg-white dark:bg-slate-800 rounded-xl shadow-lg h-full flex flex-col">
+                <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa fa-comments-o text-primary"></i>
+                        <h3 id="current-conversation-title" class="font-bold">对话 1</h3>
+                        <span id="conversation-status" class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
+                            <i class="fa fa-circle text-[8px] mr-1"></i>活跃
+                        </span>
+                    </div>
+                    <button id="toggle-conversation-status" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors" title="暂停对话">
+                        <i class="fa fa-pause"></i>
+                    </button>
+                </div>
+                
+                <!-- 历史记录区域 -->
+                <div id="history-container" class="overflow-y-auto scrollbar-hide flex-grow p-4">
+                    <!-- 历史记录将通过 JavaScript 动态加载 -->
+                    <div class="text-center py-12 text-gray-500 dark:text-gray-400">
+                        <i class="fa fa-history text-4xl mb-2"></i>
+                        <p>暂无交互历史</p>
+                    </div>
+                </div>
+                
+                <!-- 创建媒体区域 -->
+                <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <button id="voice-input-btn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors" title="语音输入">
+                            <i class="fa fa-microphone"></i>
+                        </button>
+                        <button id="handwriting-input-btn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors" title="手写输入">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <input type="text" id="prompt" placeholder="输入主题..." class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-primary dark:text-white">
+                    </div>
+                    
+                    <div class="mb-6">
+                        <select id="media-type" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-primary dark:text-white">
+                            <option value="image">图片</option>
+                            <option value="3d">3D 模型</option>
+                            <option value="word">Word 文档</option>
+                            <option value="ppt">PPT 文档</option>
+                        </select>
+                    </div>
+                    
+                    <button id="generate-media-btn" class="w-full py-4 bg-secondary hover:bg-secondary/90 text-white font-bold rounded-lg shadow transition-all duration-300 flex items-center justify-center space-x-2">
+                        <i class="fa fa-magic"></i>
+                        <span>生成媒体</span>
+                    </button>
+                    
+                    <button id="upload-to-github-btn" class="w-full mt-3 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow transition-all duration-300 flex items-center justify-center space-x-2 hidden">
+                        <i class="fa fa-github"></i>
+                        <span>上传到 GitHub</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block modals %}
+    <!-- 事务状态监控面板 -->
+    <div id="transaction-monitor" class="fixed bottom-4 right-4 z-40 hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-4 w-80 transform transition-all duration-300 hover:shadow-xl">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="font-bold text-lg">事务状态</h3>
+                <button id="close-transaction-monitor" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div id="transaction-status-container" class="space-y-3">
+                <!-- 事务状态将通过JavaScript动态更新 -->
+                <div class="text-center text-gray-500 dark:text-gray-400 py-2">
+                    <p>暂无活动事务</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 语音输入模态框 -->
+    <div id="voice-input-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">语音输入</h3>
+                <button id="close-voice-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="text-center mb-6">
+                <p id="voice-status" class="text-gray-600 dark:text-gray-400 mb-4">点击开始按钮说话</p>
+                <div class="flex justify-center space-x-4">
+                    <button id="start-voice-btn" class="px-6 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg shadow transition-all duration-300">
+                        <i class="fa fa-microphone mr-2"></i>
+                        <span>开始</span>
+                    </button>
+                    <button id="stop-voice-btn" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-lg shadow transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        <i class="fa fa-stop mr-2"></i>
+                        <span>停止</span>
+                    </button>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">语音识别结果:</p>
+                <div id="voice-result" class="bg-gray-50 dark:bg-slate-700 rounded-lg p-3 min-h-[80px] text-gray-700 dark:text-gray-300"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 手写输入模态框 -->
+    <div id="handwriting-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 max-w-2xl w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="handwriting-modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">手写输入</h3>
+                <button id="close-handwriting-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <canvas id="handwriting-canvas" class="w-full h-64 bg-gray-50 dark:bg-slate-700 rounded-lg border border-gray-200 dark:border-gray-600 cursor-crosshair"></canvas>
+            </div>
+            <div class="flex justify-between items-center mb-4">
+                <button id="clear-handwriting-btn" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-lg shadow transition-all duration-300">
+                    <i class="fa fa-eraser mr-2"></i>
+                    <span>清除</span>
+                </button>
+                <button id="recognize-handwriting-btn" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg shadow transition-all duration-300">
+                    <i class="fa fa-eye mr-2"></i>
+                    <span>识别</span>
+                </button>
+            </div>
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">识别结果:</p>
+                <div id="handwriting-result" class="bg-gray-50 dark:bg-slate-700 rounded-lg p-3 min-h-[60px] text-gray-700 dark:text-gray-300"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 登录模态框 -->
+    <div id="login-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="login-modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">登录</h3>
+                <button id="close-login-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <form id="login-form">
+                <div class="mb-4">
+                    <label for="login-username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">用户名</label>
+                    <input type="text" id="login-username" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-primary dark:text-white" placeholder="输入用户名">
+                </div>
+                <div class="mb-6">
+                    <label for="login-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">密码</label>
+                    <input type="password" id="login-password" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-primary dark:text-white" placeholder="输入密码">
+                </div>
+                <button type="submit" class="w-full py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg shadow transition-all duration-300">
+                    <span>登录</span>
+                </button>
+            </form>
+            <div class="mt-4 text-center">
+                <button id="show-register-modal" class="text-primary hover:text-primary/80 font-medium">
+                    <span>注册</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div id="register-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="register-modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">注册</h3>
+                <button id="close-register-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <form id="register-form">
+                <div class="mb-4">
+                    <label for="register-username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">用户名</label>
+                    <input type="text" id="register-username" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-primary dark:text-white" placeholder="输入用户名">
+                </div>
+                <div class="mb-4">
+                    <label for="register-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">邮箱</label>
+                    <input type="email" id="register-email" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-primary dark:text-white" placeholder="输入邮箱">
+                </div>
+                <div class="mb-4">
+                    <label for="register-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">密码</label>
+                    <input type="password" id="register-password" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-primary dark:text-white" placeholder="输入密码">
+                </div>
+                <div class="mb-6">
+                    <label for="register-confirm-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">确认密码</label>
+                    <input type="password" id="register-confirm-password" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-primary dark:text-white" placeholder="再次输入密码">
+                </div>
+                <button type="submit" class="w-full py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg shadow transition-all duration-300">
+                    <span>注册</span>
+                </button>
+            </form>
+            <div class="mt-4 text-center">
+                <button id="show-login-modal" class="text-primary hover:text-primary/80 font-medium">
+                    <span>已有账号？登录</span>
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

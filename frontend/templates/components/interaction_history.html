@@ -1,0 +1,88 @@
+<!-- 用户提示 -->
+<div class="user-interaction mb-6 flex items-start">
+    <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-300 mr-3 flex-shrink-0">
+        <i class="fa fa-user"></i>
+    </div>
+    <div class="bg-gray-100 dark:bg-slate-700 rounded-lg p-4 max-w-[90%]">
+        <p class="text-gray-800 dark:text-gray-200">{{ interaction.prompt }}</p>
+        <div class="flex justify-between items-center mt-2">
+            <span class="text-xs text-gray-500 dark:text-gray-400">
+                {{ interaction.created_at.strftime('%Y-%m-%d %H:%M') if interaction.created_at else '未知时间' }}
+            </span>
+            <div class="flex space-x-2">
+                <button class="text-xs text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" title="复制">
+                    <i class="fa fa-copy"></i>
+                </button>
+                <button class="text-xs text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors" title="删除">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 系统回复 -->
+<div class="system-interaction mb-6 flex items-start">
+    <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary mr-3 flex-shrink-0">
+        <i class="fa fa-robot"></i>
+    </div>
+    <div class="bg-white dark:bg-slate-800 rounded-lg p-4 max-w-[90%] shadow-sm">
+        {% if interaction.media_type == 'image' %}
+            <div class="relative">
+                <img src="{{ url_for('static', filename='uploads/' + interaction.file_path) }}" alt="生成的图片" class="rounded-lg max-w-full h-auto">
+                <div class="absolute top-2 right-2 flex space-x-2">
+                    <button class="p-1.5 bg-white/80 dark:bg-slate-700/80 rounded-full text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-slate-600 transition-colors" title="下载">
+                        <i class="fa fa-download"></i>
+                    </button>
+                    <button class="p-1.5 bg-white/80 dark:bg-slate-700/80 rounded-full text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-slate-600 transition-colors" title="分享">
+                        <i class="fa fa-share-alt"></i>
+                    </button>
+                </div>
+            </div>
+        {% elif interaction.media_type == '3d' %}
+            <div class="bg-gray-100 dark:bg-slate-700 rounded-lg p-6 text-center">
+                <i class="fa fa-cube text-4xl text-gray-400 dark:text-gray-500 mb-2"></i>
+                <p class="text-gray-600 dark:text-gray-400">3D 模型预览</p>
+                <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">点击下载查看完整模型</p>
+                <button class="mt-3 px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg shadow transition-all duration-300">
+                    <i class="fa fa-download mr-2"></i>下载模型
+                </button>
+            </div>
+        {% elif interaction.media_type == 'word' %}
+            <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 flex items-center">
+                <i class="fa fa-file-word-o text-3xl text-blue-600 dark:text-blue-400 mr-4"></i>
+                <div>
+                    <h4 class="font-medium text-gray-800 dark:text-gray-200">Word 文档</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">点击下载查看完整文档</p>
+                    <button class="mt-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow transition-all duration-300">
+                        <i class="fa fa-download mr-1"></i>下载文档
+                    </button>
+                </div>
+            </div>
+        {% elif interaction.media_type == 'ppt' %}
+            <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 flex items-center">
+                <i class="fa fa-file-powerpoint-o text-3xl text-red-600 dark:text-red-400 mr-4"></i>
+                <div>
+                    <h4 class="font-medium text-gray-800 dark:text-gray-200">PPT 演示文稿</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">点击下载查看完整演示文稿</p>
+                    <button class="mt-2 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg shadow transition-all duration-300">
+                        <i class="fa fa-download mr-1"></i>下载演示文稿
+                    </button>
+                </div>
+            </div>
+        {% endif %}
+        <div class="flex justify-between items-center mt-3">
+            <span class="text-xs text-gray-500 dark:text-gray-400">
+                {{ interaction.created_at.strftime('%Y-%m-%d %H:%M') if interaction.created_at else '未知时间' }}
+            </span>
+            <div class="flex space-x-2">
+                <button class="text-xs text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" title="复制">
+                    <i class="fa fa-copy"></i>
+                </button>
+                <button class="text-xs text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors" title="删除">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
