@@ -15,7 +15,7 @@ from models import Interaction
 # routes/api.py
 @api_bp.route('/')
 def index():
-    return render_template('templates/index.html')  # 对应 templates/index.html
+    return render_template('index.html')  # 对应 templates/index.html
 # routes/api.py
 @api_bp.route('/test')
 def test():
