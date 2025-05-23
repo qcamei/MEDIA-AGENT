@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from backend.models import db
+from models import db
 
 
 class Conversation(db.Model):

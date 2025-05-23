@@ -1,14 +1,25 @@
-from flask import Blueprint, request, jsonify
+from datetime import datetime
+
+from flask import Blueprint, request, jsonify, render_template
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from backend.models import db
-from backend.models.conversation import Conversation
-from backend.models.interaction import Interaction
-from backend.utils.idempotency import idempotency_check
-from backend.utils import rate_limit
-from backend.routes import api_bp
-from backend.app import app
+from models.interaction import Interaction
+from utils.idempotency import idempotency_check
+from utils.rate_limit import rate_limit
+from routes import api_bp
+from app import app
+from models import db
+from models import Conversation
+from models import Interaction
 
 
+# routes/api.py
+@api_bp.route('/')
+def index():
+    return render_template('templates/index.html')  # 对应 templates/index.html
+# routes/api.py
+@api_bp.route('/test')
+def test():
+    return "Hello, World!"  # 访问 /test 应返回此消息
 @api_bp.route('/conversations', methods=['GET'])
 @jwt_required()
 def get_conversations():

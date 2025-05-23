@@ -4,7 +4,7 @@
   "description": "AI Media Generator Application",
   "scripts": {
     "start": "flask run",
-    "dev": "flask --app ../backend/app.py run --reload",
+    "dev": "flask --app app.py run --reload",
     "test": "pytest",
     "lint": "flake8 ..",
     "format": "black .."

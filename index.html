@@ -1,0 +1,11 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+ 
+module.exports = {
+  // 其他配置...
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './templates/index.html', // 模板文件路径
+      filename: 'index.html' // 输出的HTML文件名
+    })
+  ]
+};

@@ -1,23 +1,22 @@
 from flask import current_app
 
-from backend.services.media_generator_service import MediaGeneratorService
-from backend.services.transaction_service import TransactionService
-from backend.services.storage_service import StorageService
-from backend.services.githhub_service import GitHubService
+from services.media_generator_service import MediaGeneratorService
+from services.transaction_service import TransactionService
+from services.storage_service import StorageService
+from services.githhub_service import GitHubService
+from app import config
 
 def get_media_generator():
-    return MediaGeneratorService(
-        openai_api_key=current_app.config['OPENAI_API_KEY']
-    )
+    return MediaGeneratorService(config)
 
 def get_storage_service():
-    return StorageService()
+    return StorageService(config)
 
 def get_transaction_service():
     return TransactionService()
 
 def get_github_service():
     return GitHubService(
-        client_id=current_app.config['GITHUB_CLIENT_ID'],
-        client_secret=current_app.config['GITHUB_CLIENT_SECRET']
+        client_id=config.get('GITHUB_CLIENT_ID'),
+        client_secret=config.get('GITHUB_CLIENT_SECRET')
     )

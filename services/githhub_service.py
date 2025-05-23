@@ -1,6 +1,6 @@
 import requests
 from flask import current_app, url_for
-from backend.models import User
+from models import User
 
 
 class GitHubService:

@@ -3,8 +3,8 @@ import random
 from io import BytesIO
 import deepseek
 from PIL import Image
-from backend.utils.mermaid_generator import MermaidGenerator
-from backend.utils.prompt_to_mermaid import MermaidTranslator
+from utils.mermaid_generator import MermaidGenerator
+from utils.prompt_to_mermaid import MermaidTranslator
 
 mermaid_translator = MermaidTranslator()
 mermaid_generator = MermaidGenerator()

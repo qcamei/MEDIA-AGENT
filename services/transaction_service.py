@@ -1,4 +1,4 @@
-from backend.models import Transaction, db
+from models import Transaction, db
 from datetime import datetime
 from typing import Dict, Any
 

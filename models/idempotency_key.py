@@ -1,6 +1,6 @@
 # models/idempotency_key.py
 from datetime import datetime
-from backend.models import db  # 确保从独立文件导入 db
+from models import db  # 确保从独立文件导入 db
 
 class IdempotencyKey(db.Model):
     id = db.Column(db.String(255), primary_key=True)
