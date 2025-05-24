@@ -1,5 +1,5 @@
 from datetime import datetime
-from models import db
+from .common import db
 
 
 class Interaction(db.Model):

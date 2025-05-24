@@ -3,11 +3,10 @@ import random
 from io import BytesIO
 import deepseek
 from PIL import Image
-from utils.mermaid_generator import MermaidGenerator
-from utils.prompt_to_mermaid import MermaidTranslator
+from .mermaid_generator import generate_image
+from .prompt_to_mermaid import translate_flow
 
-mermaid_translator = MermaidTranslator()
-mermaid_generator = MermaidGenerator()
+
 class MediaGeneratorService:
     def __init__(self, config):
         self.config = config
@@ -26,8 +25,8 @@ class MediaGeneratorService:
             raise ValueError(f"Unsupported media type: {media_type}")
 
     def generate_image(self, prompt):
-        mermaid_code = mermaid_translator.translate_flow(prompt)
-        return mermaid_generator.generate_image(mermaid_code)
+        mermaid_code = translate_flow(prompt)
+        return generate_image(mermaid_code)
 
     # def generate_image(self, prompt):
     #     try:

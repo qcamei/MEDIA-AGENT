@@ -1,11 +1,12 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from models.user import User
-from models import db
-auth_bp = Blueprint('auth', __name__)
+from .services.models import User
+from .services.models import db
+
+auth = Blueprint('auth', __name__, url_prefix='/auth')
 
 
-@auth_bp.route('/register', methods=['POST'])
+@auth.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
     username = data.get('username')
@@ -26,7 +27,7 @@ def register():
     return jsonify({'message': 'User registered successfully'}), 201
 
 
-@auth_bp.route('/login', methods=['POST'])
+@auth.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     username = data.get('username')
@@ -41,14 +42,14 @@ def login():
     return jsonify({'access_token': access_token, 'user': user.to_dict()}), 200
 
 
-@auth_bp.route('/logout', methods=['POST'])
+@auth.route('/logout', methods=['POST'])
 @jwt_required()
 def logout():
     # JWT 是无状态的，所以只需要客户端删除 token
     return jsonify({'message': 'Logged out successfully'}), 200
 
 
-@auth_bp.route('/me', methods=['GET'])
+@auth.route('/me', methods=['GET'])
 @jwt_required()
 def get_current_user():
     user_id = get_jwt_identity()

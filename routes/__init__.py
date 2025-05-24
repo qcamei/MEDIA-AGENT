@@ -1,3 +1,7 @@
-from flask import Blueprint
+from .api import api
+from .auth import auth
 
-api_bp = Blueprint('api', __name__, url_prefix='/api')
+def init_route(app):
+    for blueprint in [api, auth]:
+        app.register_blueprint(blueprint)
+

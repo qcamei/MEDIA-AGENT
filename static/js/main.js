@@ -309,6 +309,132 @@ function showNotification(message, type = 'info') {
         }, 300);
     }, 3000);
 }
-
 // 其他功能实现（语音输入、手写输入等）
+// 开始语音识别
+function startVoiceRecognition() {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'zh-CN';
+    recognition.interimResults = false;
+
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('voice-result').textContent = transcript;
+    };
+
+    recognition.onerror = function(event) {
+        console.error('语音识别出错:', event.error);
+    };
+
+    recognition.start();
+
+    // 禁用开始按钮，启用停止按钮
+    document.getElementById('start-voice-btn').disabled = true;
+    document.getElementById('stop-voice-btn').disabled = false;
+}
+
+// 停止语音识别
+function stopVoiceRecognition() {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.stop();
+
+    // 启用开始按钮，禁用停止按钮
+    document.getElementById('start-voice-btn').disabled = false;
+    document.getElementById('stop-voice-btn').disabled = true;
+}
 // ...（其他功能代码，因篇幅限制，此处省略）
+// 显示语音输入模态框
+function showVoiceInputModal() {
+    const modal = document.getElementById('voice-input-modal');
+    const modalContent = document.getElementById('modal-content');
+
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        modalContent.classList.add('modal-appear');
+    }, 10);
+
+    // 隐藏其他模态框
+    hideLoginModal();
+    hideRegisterModal();
+    hideHandwritingModal();
+}
+
+// 隐藏语音输入模态框
+function hideVoiceInputModal() {
+    const modal = document.getElementById('voice-input-modal');
+    const modalContent = document.getElementById('modal-content');
+
+    modalContent.classList.remove('modal-appear');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300);
+}
+
+// 显示手写输入模态框
+function showHandwritingModal() {
+    const modal = document.getElementById('handwriting-modal');
+    const modalContent = document.getElementById('handwriting-modal-content');
+
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        modalContent.classList.add('modal-appear');
+    }, 10);
+
+    // 隐藏其他模态框
+    hideLoginModal();
+    hideRegisterModal();
+    hideVoiceInputModal();
+}
+
+// 隐藏手写输入模态框
+function hideHandwritingModal() {
+    const modal = document.getElementById('handwriting-modal');
+    const modalContent = document.getElementById('handwriting-modal-content');
+
+    modalContent.classList.remove('modal-appear');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300);
+}
+
+// 清除手写板
+function clearHandwritingCanvas() {
+    const canvas = document.getElementById('handwriting-canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// 识别手写内容
+function recognizeHandwriting() {
+    // 这里可以实现手写识别逻辑
+    alert('手写识别功能待实现');
+}
+
+// 创建新对话
+function createNewConversation() {
+    // 这里可以实现创建新对话的逻辑
+    alert('创建新对话功能待实现');
+}
+
+// 生成媒体
+function generateMedia() {
+    // 这里可以实现生成媒体的逻辑
+    alert('生成媒体功能待实现');
+}
+
+// 上传到GitHub
+function uploadToGitHub() {
+    // 这里可以实现上传到GitHub的逻辑
+    alert('上传到GitHub功能待实现');
+}
+
+// 隐藏事务监控面板
+function hideTransactionMonitor() {
+    const monitor = document.getElementById('transaction-monitor');
+    monitor.classList.add('hidden');
+}
+
+// 切换语言
+function toggleLanguage() {
+    // 这里可以实现切换语言的逻辑
+    alert('切换语言功能待实现');
+}

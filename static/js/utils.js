@@ -251,6 +251,3 @@ class Utils {
         }, duration);
     }
 }
-
-// 导出工具类
-export default Utils;

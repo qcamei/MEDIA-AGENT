@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from models import db
+from .common import db
 
 
 class Conversation(db.Model):

@@ -1,7 +1,7 @@
 from __future__ import with_statement
 from alembic import context
 from sqlalchemy import engine_from_config, pool
-from models import db
+from routes.services.models import db
 
 config = context.config
 target_metadata = db.metadata

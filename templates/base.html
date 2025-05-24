@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}媒体生成助手{% endblock %}</title>
+    <!-- 建议在生产环境中使用本地编译的 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    <script src="../static/js/main.js"></script>
+    <link rel="stylesheet" href="../static/css/style.css">
+
     {% block head %}{% endblock %}
 </head>
 <body class="bg-gray-50 dark:bg-slate-900 font-inter min-h-screen flex flex-col transition-colors duration-300">

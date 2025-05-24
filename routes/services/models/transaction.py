@@ -1,6 +1,5 @@
 from datetime import datetime
-from models import db
-
+from .common import db
 
 class Transaction(db.Model):
     id = db.Column(db.String(100), primary_key=True)
