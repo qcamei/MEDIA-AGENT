@@ -8,8 +8,8 @@ from utils.rate_limit import rate_limit
 from routes import api_bp
 from app import app
 from models import db
-from models import Conversation
-from models import Interaction
+from models.conversation import Conversation
+from models.interaction import Interaction
 
 
 # routes/api.py
