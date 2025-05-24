@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_cors import CORS
-from .config import Config
-from .routes import api_bp
-from .models import init_db
+from config import Config
+from routes import api_bp
+from models import init_db
 
 import os
 
@@ -25,9 +25,10 @@ def create_app(config_name='default'):
 
     app.config.from_object(Config)
 
-    print(app.config.get('SQLALCHEMY_DATABASE_URI'))
+
     # 初始化扩展
-    init_db(app)
+    with app.app_context():
+        init_db(app)
     CORS(app)
     # 注册蓝图
     app.register_blueprint(api_bp)

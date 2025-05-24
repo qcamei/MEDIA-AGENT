@@ -21,7 +21,7 @@ def index():
 def test():
     return "Hello, World!"  # 访问 /test 应返回此消息
 @api_bp.route('/conversations', methods=['GET'])
-@jwt_required()
+#@jwt_required()
 def get_conversations():
     user_id = get_jwt_identity()
     conversations = Conversation.query.filter_by(user_id=user_id).order_by(Conversation.updated_at.desc()).all()
